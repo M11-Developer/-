@@ -28,7 +28,28 @@ jobs:
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Run unit tests and assemble debug APK
-        run: ./gradlew --no-daemon testDebugUnitTest assembleDebug
+        id: android-build
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon --stacktrace testDebugUnitTest assembleDebug 2>&1 | tee build.log
+
+      - name: Surface Gradle diagnostics
+        if: failure()
+        run: |
+          if [ -f build.log ]; then
+            tail -n 30 build.log | while IFS= read -r line; do
+              line="${line//'%'/'%25'}"
+              echo "::warning title=Gradle diagnostic::$line"
+            done
+          fi
+
+      - name: Upload Gradle diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-diagnostics
+          path: build.log
+          if-no-files-found: ignore
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
