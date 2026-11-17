@@ -37,7 +37,7 @@ jobs:
         if: failure()
         run: |
           if [ -f build.log ]; then
-            python3 -c 'from pathlib import Path; output = Path("build.log").read_text(errors="replace")[-5000:]; output = output.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"); print("::warning title=Gradle log tail::" + output)'
+            python3 -c 'from pathlib import Path; import re; text = Path("build.log").read_text(errors="replace"); matches = list(re.finditer(r"FAILURE:.*", text)); start = matches[-1].start() if matches else max(0, len(text) - 3000); output = text[start:start + 3000].replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"); print("::warning title=Gradle failure summary::" + output)'
           fi
 
       - name: Upload Gradle diagnostics
