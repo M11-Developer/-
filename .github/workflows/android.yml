@@ -31,28 +31,25 @@ jobs:
         id: android-build
         run: |
           set -o pipefail
-          ./gradlew --no-daemon --stacktrace testDebugUnitTest assembleDebug 2>&1 | tee build.log
+          ./gradlew --no-daemon --console=plain --stacktrace testDebugUnitTest assembleDebug 2>&1 | tee build.log
 
       - name: Surface Gradle diagnostics
         if: failure()
         run: |
           if [ -f build.log ]; then
-            grep -iE 'failure|failed|error|exception|cause:|what went wrong|^>' build.log | tail -n 40 | while IFS= read -r line; do
-              line="${line//'%'/'%25'}"
-              echo "::warning title=Gradle diagnostic::$line"
-            done
+            python3 -c 'from pathlib import Path; output = Path("build.log").read_text(errors="replace")[-5000:]; output = output.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"); print("::warning title=Gradle log tail::" + output)'
           fi
 
       - name: Upload Gradle diagnostics
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gradle-diagnostics
           path: build.log
           if-no-files-found: ignore
 
       - name: Upload debug APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mirsad-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
