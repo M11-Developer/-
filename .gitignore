@@ -1,0 +1,12 @@
+# Android / Gradle
+.gradle/
+**/build/
+local.properties
+*.iml
+.idea/
+
+# Local Android Studio state
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
