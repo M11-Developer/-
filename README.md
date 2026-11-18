@@ -30,9 +30,9 @@ app/build/outputs/apk/debug/app-debug.apk
 
 إذا لم يكن SDK مثبتًا، ثبّت Platform 35 وBuild Tools 35.0.0 من Android Studio > SDK Manager. يشغّل GitHub Actions الاختبارات والبناء على كل push وpull request. وبعد نجاح الاختبارات، يؤدي دفع وسم إصدار بصيغة `v*` إلى إنشاء GitHub prerelease وإرفاق APK تطوير موقّع بمفتاح debug. هذا الملف مخصص للاختبار والتثبيت الجانبي، وليس إصدارًا إنتاجيًا موقّعًا للنشر في Google Play.
 
-### حالة بيئة التطوير الحالية
+### نسخة الاختبار الحالية
 
-لا تتوفر في بيئة العمل المحلية JDK أو Android SDK/`android.jar` صالحة للبناء، لذلك لا يمكن بناء APK محليًا هنا. لكن نجح تشغيل CI رقم `44204273101`: اجتازت اختبارات الوحدات وأُنتج APK التطوير كـ artifact. تنزيل ملفات artifacts مباشرةً إلى هذه البيئة غير متاح بسبب قيود الشبكة؛ لذلك تُرفق الإصدارات التجريبية بالـ GitHub Release آليًا بعد نجاح CI.
+[مِرْصاد v1.0.0 — APK تجريبي](https://github.com/M11-Developer/-/releases/tag/v1.0.0). اجتازت اختبارات الوحدات والبناء في [GitHub Actions](https://github.com/M11-Developer/-/actions/runs/44204961930)، ثم نُشر APK المرفق تلقائيًا. الملف موقّع بمفتاح debug، وليس إصدارًا إنتاجيًا موقّعًا للنشر في Google Play.
 
 ## المعايرة والاستخدام
 
