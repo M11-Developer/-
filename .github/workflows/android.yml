@@ -54,3 +54,37 @@ jobs:
           name: mirsad-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+  publish-release:
+    name: Publish test APK release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download tested APK
+        uses: actions/download-artifact@v8
+        with:
+          name: mirsad-debug-apk
+          path: release
+
+      - name: Publish GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          cat > release-notes.md <<EOF
+          مِرْصاد هو تطبيق Android عربي يعرض تغيّرات المجال المغناطيسي التي يقيسها حساس الهاتف.
+
+          **هذا إصدار تجريبي للتثبيت الجانبي فقط.** ملف APK موقّع بمفتاح debug تلقائي، وليس إصدارًا إنتاجيًا موقّعًا للنشر في Google Play.
+
+          **حدود المستشعر:** يعتمد التطبيق على مقياس المجال المغناطيسي المدمج. لا يكشف الذهب أو النحاس أو الألمنيوم مباشرةً، ولا يحدد نوع الجسم أو عمقه. قد تؤثر المغانط والأغطية والشواحن والحديد القريب في القراءات.
+
+          All Credits go to **M-Eleven — Mohamed El-Sayed Abdelfatah**. See [CREDITS.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_REF_NAME}/CREDITS.md) and [LICENSE](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_REF_NAME}/LICENSE).
+          EOF
+          gh release create "${GITHUB_REF_NAME}" release/app-debug.apk \
+            --verify-tag \
+            --prerelease \
+            --title "مِرْصاد ${GITHUB_REF_NAME} — APK تجريبي" \
+            --notes-file release-notes.md

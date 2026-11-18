@@ -28,11 +28,11 @@
 app/build/outputs/apk/debug/app-debug.apk
 ```
 
-إذا لم يكن SDK مثبتًا، ثبّت Platform 35 وBuild Tools 35.0.0 من Android Studio > SDK Manager. يوجد سير عمل GitHub Actions للبناء والاختبارات على كل push وpull request.
+إذا لم يكن SDK مثبتًا، ثبّت Platform 35 وBuild Tools 35.0.0 من Android Studio > SDK Manager. يشغّل GitHub Actions الاختبارات والبناء على كل push وpull request. وبعد نجاح الاختبارات، يؤدي دفع وسم إصدار بصيغة `v*` إلى إنشاء GitHub prerelease وإرفاق APK تطوير موقّع بمفتاح debug. هذا الملف مخصص للاختبار والتثبيت الجانبي، وليس إصدارًا إنتاجيًا موقّعًا للنشر في Google Play.
 
 ### حالة بيئة التطوير الحالية
 
-هذا المستودع أُنشئ هنا دون JDK أو Gradle أو Android SDK/`android.jar` مثبتة. كما أن بيئة التنفيذ تقيد التنزيلات الصادرة ولا تسمح بالوصول إلى مستودع حزم Android الرسمي؛ لذلك لم يكن ممكنًا تنزيل SDK أو إنتاج APK أو تشغيل Gradle محليًا في هذه الجلسة. إعداد المشروع وسير عمل CI جاهزان للبناء في بيئة Android متصلة.
+لا تتوفر في بيئة العمل المحلية JDK أو Android SDK/`android.jar` صالحة للبناء، لذلك لا يمكن بناء APK محليًا هنا. لكن نجح تشغيل CI رقم `44204273101`: اجتازت اختبارات الوحدات وأُنتج APK التطوير كـ artifact. تنزيل ملفات artifacts مباشرةً إلى هذه البيئة غير متاح بسبب قيود الشبكة؛ لذلك تُرفق الإصدارات التجريبية بالـ GitHub Release آليًا بعد نجاح CI.
 
 ## المعايرة والاستخدام
 
